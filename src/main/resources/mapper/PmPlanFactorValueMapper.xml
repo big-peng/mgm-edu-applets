@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yy.server.mapper.PmPlanFactorValueMapper">
+  <resultMap id="BaseResultMap" type="com.yy.server.model.PmPlanFactorValue">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="show_label" jdbcType="VARCHAR" property="showLabel" />
+    <result column="show_value" jdbcType="VARCHAR" property="showValue" />
+    <result column="show_value_type" jdbcType="TINYINT" property="showValueType" />
+    <result column="is_have_default_value" jdbcType="TINYINT" property="isHaveDefaultValue" />
+    <result column="default_value_type" jdbcType="TINYINT" property="defaultValueType" />
+    <result column="factor_id" jdbcType="INTEGER" property="factorId" />
+    <result column="del_flag" jdbcType="CHAR" property="delFlag" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="app_id" jdbcType="VARCHAR" property="appId" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+  </resultMap>
+
+  <select id="getPmPlanFactorValues" resultMap="BaseResultMap">
+    select * from pm_plan_factor_value a
+    <where>
+      del_flag='N'
+      <if test="appId!=null and appId!=''">
+        and a.app_id = #{appId}
+      </if>
+      <if test="factorId!=null and factorId!=''">
+        and a.factor_id = #{factorId}
+      </if>
+    </where>
+    order by a.order_id asc
+  </select>
+  <update id="updateDelFactorValuesByFactorId">
+    update pm_plan_factor_value set del_flag='Y',update_time=now() where factor_id=#{factorId}
+  </update>
+</mapper>

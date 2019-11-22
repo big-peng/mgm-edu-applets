@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <property name="mappers" value="tk.mybatis.mapper.common.Mapper"/>
+            <property name="caseSensitive" value="true"/>
+        </plugin>
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://47.92.97.244:3306/mgm_dev?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false"
+                        userId="mgm"
+                        password="mgm123">
+        </jdbcConnection>
+
+        <javaModelGenerator targetPackage="com.yy.server.model.po"
+                            targetProject="../cust-server/src/main/java"/>
+
+        <sqlMapGenerator targetPackage="mapper"
+                         targetProject="../cust-server/src/main/resources"/>
+
+        <javaClientGenerator targetPackage="com.yy.server.mapper"
+                             targetProject="../cust-server/src/main/java"
+                             type="XMLMAPPER"/>
+<!--
+        <table tableName="xt_liushuihao"/>
+-->
+        <table tableName="cust_register"/>
+    </context>
+</generatorConfiguration>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yy.server.mapper.PmPlanFactorMapper" >
+  <resultMap id="BaseResultMap" type="com.yy.server.model.PmPlanFactor" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="com_type" property="comType" jdbcType="VARCHAR" />
+    <result column="tips_desc" property="tipsDesc" jdbcType="VARCHAR" />
+    <result column="is_remark_input" property="isRemarkInput" jdbcType="CHAR" />
+    <result column="remark_input_str" property="remarkInputStr" jdbcType="VARCHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <result column="state" property="state" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="app_id" property="appId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="plan_id" property="planId" jdbcType="INTEGER" />
+  </resultMap>
+
+  <resultMap id="voMap" type="com.yy.server.model.view.PmPlanFactorVO">
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="com_type" property="comType" jdbcType="VARCHAR" />
+    <result column="tips_desc" property="tipsDesc" jdbcType="VARCHAR" />
+    <result column="is_remark_input" property="isRemarkInput" jdbcType="CHAR" />
+    <result column="remark_input_str" property="remarkInputStr" jdbcType="VARCHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <result column="state" property="state" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="app_id" property="appId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="plan_id" property="planId" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="getDataList" resultMap="voMap">
+    select a.* from pm_plan_factor a
+    <where>
+      a.del_flag='N'
+      <if test="name !=null and name != ''">
+        and a.name like CONCAT('%',#{name},'%' )
+      </if>
+      <if test="comType !=null and comType != ''">
+        and a.com_type =#{comType}
+      </if>
+      <if test="state !=null and state != ''">
+        and a.state =#{state}
+      </if>
+      <if test="appId!=null and appId!=''">
+        and a.app_id = #{appId}
+      </if>
+      <if test="planId!=null and planId!=''">
+        and a.plan_id = #{planId}
+      </if>
+    </where>
+    order by a.order_id asc
+  </select>
+
+  <select id="getPmPlanFactors" resultMap="BaseResultMap">
+    select * from pm_plan_factor a
+    <where>
+      state=1 and del_flag='N'
+      <if test="appId!=null and appId!=''">
+        and a.app_id = #{appId}
+      </if>
+    </where>
+    order by a.order_id asc
+  </select>
+</mapper>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yy.server.mapper.AppShopMapper">
+    <resultMap id="BaseResultMap" type="com.yy.server.model.AppShop">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="zid" jdbcType="VARCHAR" property="zid"/>
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName"/>
+        <result column="shop_type" jdbcType="VARCHAR" property="shopType"/>
+        <result column="shop_address" jdbcType="VARCHAR" property="shopAddress"/>
+        <result column="shop_hours" jdbcType="VARCHAR" property="shopHours"/>
+        <result column="telephone" jdbcType="VARCHAR" property="telephone"/>
+        <result column="shop_desc" jdbcType="VARCHAR" property="shopDesc"/>
+        <result column="shop_keywords" jdbcType="VARCHAR" property="shopKeywords"/>
+        <result column="shop_status" jdbcType="TINYINT" property="shopStatus"/>
+        <result column="area_id" jdbcType="INTEGER" property="areaId"/>
+        <result column="baidu_longitude" jdbcType="VARCHAR" property="baiduLongitude"/>
+        <result column="baidu_latitude" jdbcType="VARCHAR" property="baiduLatitude"/>
+        <result column="gaode_longitude" jdbcType="VARCHAR" property="gaodeLongitude"/>
+        <result column="gaode_latitude" jdbcType="VARCHAR" property="gaodeLatitude"/>
+        <result column="baidu_point" jdbcType="VARCHAR" property="baiduPoint"/>
+        <result column="gaode_point" jdbcType="VARCHAR" property="gaodePoint"/>
+        <result column="company_id" jdbcType="INTEGER" property="companyId"/>
+        <result column="sms_reg_code" jdbcType="VARCHAR" property="smsRegCode"/>
+        <result column="sms_validation_code" jdbcType="VARCHAR" property="smsValidationCode"/>
+        <result column="must_invite" jdbcType="BIT" property="mustInvite"/>
+        <result column="mail_title" jdbcType="VARCHAR" property="mailTitle"/>
+        <result column="show_financing" jdbcType="BIT" property="showFinancing"/>
+        <result column="show_auto_invest" jdbcType="BIT" property="showAutoInvest"/>
+        <result column="state" jdbcType="BIT" property="state"/>
+        <result column="protocl_zid" jdbcType="VARCHAR" property="protoclZid"/>
+        <result column="download_page" jdbcType="VARCHAR" property="downloadPage"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="created_user" jdbcType="VARCHAR" property="createdUser"/>
+        <result column="updated_user" jdbcType="VARCHAR" property="updatedUser"/>
+        <result column="qrcode1_title_url" jdbcType="VARCHAR" property="qrcode1TitleUrl"/>
+        <result column="qrcode1_image_url" jdbcType="VARCHAR" property="qrcode1ImageUrl"/>
+        <result column="qrcode2_title_url" jdbcType="VARCHAR" property="qrcode2TitleUrl"/>
+        <result column="qrcode2_image_url" jdbcType="VARCHAR" property="qrcode2ImageUrl"/>
+        <result column="ext_code_title_url" jdbcType="VARCHAR" property="extCodeTitleUrl"/>
+        <result column="ext_code_image_url" jdbcType="VARCHAR" property="extCodeImageUrl"/>
+    </resultMap>
+
+    <resultMap id="voMap" type="com.yy.server.model.view.AppShopVO">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="zid" jdbcType="VARCHAR" property="zid"/>
+        <result column="shop_name" jdbcType="VARCHAR" property="shopName"/>
+        <result column="shop_type" jdbcType="VARCHAR" property="shopType"/>
+        <result column="shop_address" jdbcType="VARCHAR" property="shopAddress"/>
+        <result column="shop_hours" jdbcType="VARCHAR" property="shopHours"/>
+        <result column="telephone" jdbcType="VARCHAR" property="telephone"/>
+        <result column="shop_desc" jdbcType="VARCHAR" property="shopDesc"/>
+        <result column="shop_keywords" jdbcType="VARCHAR" property="shopKeywords"/>
+        <result column="shop_status" jdbcType="TINYINT" property="shopStatus"/>
+        <result column="area_id" jdbcType="INTEGER" property="areaId"/>
+        <result column="baidu_longitude" jdbcType="VARCHAR" property="baiduLongitude"/>
+        <result column="baidu_latitude" jdbcType="VARCHAR" property="baiduLatitude"/>
+        <result column="gaode_longitude" jdbcType="VARCHAR" property="gaodeLongitude"/>
+        <result column="gaode_latitude" jdbcType="VARCHAR" property="gaodeLatitude"/>
+        <result column="baidu_point" jdbcType="VARCHAR" property="baiduPoint"/>
+        <result column="gaode_point" jdbcType="VARCHAR" property="gaodePoint"/>
+        <result column="company_id" jdbcType="INTEGER" property="companyId"/>
+        <result column="sms_reg_code" jdbcType="VARCHAR" property="smsRegCode"/>
+        <result column="sms_validation_code" jdbcType="VARCHAR" property="smsValidationCode"/>
+        <result column="must_invite" jdbcType="BIT" property="mustInvite"/>
+        <result column="mail_title" jdbcType="VARCHAR" property="mailTitle"/>
+        <result column="show_financing" jdbcType="BIT" property="showFinancing"/>
+        <result column="show_auto_invest" jdbcType="BIT" property="showAutoInvest"/>
+        <result column="state" jdbcType="BIT" property="state"/>
+        <result column="protocl_zid" jdbcType="VARCHAR" property="protoclZid"/>
+        <result column="download_page" jdbcType="VARCHAR" property="downloadPage"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="created_user" jdbcType="VARCHAR" property="createdUser"/>
+        <result column="updated_user" jdbcType="VARCHAR" property="updatedUser"/>
+        <result column="qrcode1_title_url" jdbcType="VARCHAR" property="qrcode1TitleUrl"/>
+        <result column="qrcode1_image_url" jdbcType="VARCHAR" property="qrcode1ImageUrl"/>
+        <result column="qrcode2_title_url" jdbcType="VARCHAR" property="qrcode2TitleUrl"/>
+        <result column="qrcode2_image_url" jdbcType="VARCHAR" property="qrcode2ImageUrl"/>
+        <result column="ext_code_title_url" jdbcType="VARCHAR" property="extCodeTitleUrl"/>
+        <result column="ext_code_image_url" jdbcType="VARCHAR" property="extCodeImageUrl"/>
+    </resultMap>
+    <select id="selectAppShopList" resultMap="voMap">
+        select
+        `id`,
+        `zid`,
+        `shop_name`,
+        `shop_type`,
+        `shop_address`,
+        `shop_hours`,
+        `telephone`,
+        `shop_desc`,
+        `shop_keywords`,
+        `shop_status`,
+        `area_id`,
+        `baidu_longitude`,
+        `baidu_latitude`,
+        `gaode_longitude`,
+        `gaode_latitude`,
+        `baidu_point`,
+        `gaode_point`,
+        `company_id`,
+        `sms_reg_code`,
+        `sms_validation_code`,
+        `must_invite`,
+        `mail_title`,
+        `show_financing`,
+        `show_auto_invest`,
+        `state`,
+        `protocl_zid`,
+        `download_page`,
+        `created_time`,
+        `update_time`,
+        `created_user`,
+        `updated_user`,
+        `qrcode1_title_url`,
+        `qrcode1_image_url`,
+        `qrcode2_title_url`,
+        `qrcode2_image_url`,
+        `ext_code_title_url`,
+        `ext_code_image_url`
+        from app_shop a
+        <where>
+            <if test="companyId!=null and companyId!=''">
+                and a.company_id = #{companyId}
+            </if>
+            <if test="state !=null and state != ''">
+                and a.state =#{state}
+            </if>
+            <if test="shopName!=null and shopName!=''">
+                and a.shop_name like CONCAT('%',#{shopName},'%' )
+            </if>
+            <if test="shopStatus!=null">
+                and a.shop_status = #{shopStatus}
+            </if>
+            <if test="shopType !=null">
+                and a.shop_type =#{shopType}
+            </if>
+        </where>
+        order by a.created_time desc
+    </select>
+</mapper>

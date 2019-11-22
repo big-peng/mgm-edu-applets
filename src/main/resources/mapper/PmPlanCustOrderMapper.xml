@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yy.server.mapper.PmPlanCustOrderMapper">
+    <resultMap id="BaseResultMap" type="com.yy.server.model.PmPlanCustOrder">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="cust_id" property="custId" jdbcType="INTEGER"/>
+        <result column="aim_questions" property="aimQuestions" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="plan_id" property="planId" jdbcType="INTEGER"/>
+        <result column="plan_name" property="planNme" jdbcType="VARCHAR"/>
+        <result column="face_diagnose_id" property="faceDiagnoseId" jdbcType="VARCHAR"/>
+        <result column="physician_id" property="physicianId" jdbcType="VARCHAR"/>
+        <result column="assistant_id" property="assistantId" jdbcType="VARCHAR"/>
+        <result column="diagnose_remark" property="diagnoseRemark" jdbcType="VARCHAR"/>
+        <result column="del_flag" property="delFlag" jdbcType="CHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="app_id" property="appId" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="voMap" type="com.yy.server.model.view.CustDiagnoseOrderVO">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="rowNum" property="rowNum" jdbcType="INTEGER"/>
+        <result column="custId" property="custId" jdbcType="INTEGER"/>
+        <result column="account" property="account" jdbcType="VARCHAR"/>
+        <result column="userName" property="userName" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="planNme" property="planNme" jdbcType="VARCHAR"/>
+        <result column="planId" property="planId" jdbcType="INTEGER"/>
+        <result column="faceDiagnoseId" property="faceDiagnoseId" jdbcType="VARCHAR"/>
+        <result column="faceDiagnoseName" property="faceDiagnoseName" jdbcType="VARCHAR"/>
+        <result column="physicianId" property="physicianId" jdbcType="VARCHAR"/>
+        <result column="physicianName" property="physicianName" jdbcType="VARCHAR"/>
+        <result column="assistantId" property="assistantId" jdbcType="VARCHAR"/>
+        <result column="assistantName" property="assistantName" jdbcType="VARCHAR"/>
+        <result column="updateFlag" property="updateFlag" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="appId" property="appId" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getCustDiagnoseOrdersByCustId" resultMap="voMap">
+      select (@i:=@i+1) rowNum,s.* from (
+        select a.result_id id,a.cust_id custId, 'AI诊断' name,'' planId,'' planName,  a.create_time createTime,'' physicianId,'' physicianName,'' face_diagnoseId,'' faceDiagnoseName,'' assistantId,'' assistantName,'0' updateFlag  from ai_diagnose_cust_result a where a.del_flag='N'
+        union ALL
+        select m.id,m.cust_id custId,m.name,m.plan_id planId,m.plan_name planName,m.create_time createTime,
+        m.physician_id physicianId,
+        (select a.real_name from admin a where a.admin_id=m.physician_id) physicianName,
+        m.face_diagnose_id faceDiagnoseId,
+        (select a.real_name from admin a where a.admin_id=m.face_diagnose_id) faceDiagnoseName,
+        m.assistant_id assistantId,
+        (select a.real_name from admin a where a.admin_id=m.assistant_id) assistantName
+        ,'1' updateFlag
+        from pm_plan_cust_order m,pm_plan n where n.del_flag='N' and m.del_flag='N' and m.plan_id=n.id ) s ,(select @i:=0)t where s.custId=#{custId} ORDER BY s.createTime desc
+    </select>
+
+
+    <select id="getCustDiagnoseOrdersByParams" resultMap="voMap">
+        select (@i:=@i+1) rowNum,s.*,m.account,m.name userName from (
+        select a.result_id id,a.cust_id custId, 'AI诊断' name,'' planId,'' planName, a.create_time createTime,''
+        physicianId,'' physicianName,'' face_diagnoseId,'' faceDiagnoseName,'' assistantId,'' assistantName,'0'
+        updateFlag from ai_diagnose_cust_result a where a.del_flag='N'
+        union ALL
+        select m.id,m.cust_id custId,m.name,m.plan_id planId,m.plan_name planName,m.create_time createTime,
+        m.physician_id physicianId,
+        (select a.real_name from admin a where a.admin_id=m.physician_id) physicianName,
+        m.face_diagnose_id faceDiagnoseId,
+        (select a.real_name from admin a where a.admin_id=m.face_diagnose_id) faceDiagnoseName,
+        m.assistant_id assistantId,
+        (select a.real_name from admin a where a.admin_id=m.assistant_id) assistantName
+        ,'1' updateFlag
+        from pm_plan_cust_order m,pm_plan n where n.del_flag='N' and m.del_flag='N' and m.plan_id=n.id ) s, customer m, (select @i:=0)t
+        <where>
+            s.custId=m.id
+            <if test="custId!=null and custId!=''">
+                and s.custId = #{custId}
+            </if>
+            <if test="appId!=null and appId!=''">
+                and m.app_id = #{appId}
+            </if>
+            <if test="account!=null and account!=''">
+                and m.account = #{account}
+            </if>
+            <if test="userName!=null and userName!=''">
+                and m.name = #{userName}
+            </if>
+        </where>
+        ORDER BY s.createTime desc
+    </select>
+
+
+    <select id="getCustDiagnosePlanOrdersByParams" resultMap="voMap">
+        select (@i:=@i+1) rowNum,s.*,m.account,m.name userName from (
+        select m.id,m.cust_id custId,m.name,m.plan_id planId,m.plan_name planName,m.create_time createTime,
+        m.physician_id physicianId,
+        (select a.real_name from admin a where a.admin_id=m.physician_id) physicianName,
+        m.face_diagnose_id faceDiagnoseId,
+        (select a.real_name from admin a where a.admin_id=m.face_diagnose_id) faceDiagnoseName,
+        m.assistant_id assistantId,
+        (select a.real_name from admin a where a.admin_id=m.assistant_id) assistantName
+        ,'1' updateFlag
+        from pm_plan_cust_order m,pm_plan n where n.del_flag='N' and m.del_flag='N' and m.plan_id=n.id ) s , customer m, (select @i:=0)t
+        <where>
+            s.custId=m.id
+            <if test="custId!=null and custId!=''">
+                and s.custId = #{custId}
+            </if>
+            <if test="appId!=null and appId!=''">
+                and m.app_id = #{appId}
+            </if>
+            <if test="account!=null and account!=''">
+                and m.account like CONCAT(CONCAT('%',#{account},'%'))
+            </if>
+            <if test="userName!=null and userName!=''">
+                and m.name like CONCAT(CONCAT('%',#{userName},'%'))
+            </if>
+        </where>
+        ORDER BY s.createTime desc
+    </select>
+
+    <select id="getCustManagePlanOrdersByCustId" resultMap="voMap">
+        select m.id,m.cust_id custId,m.name,m.plan_id planId,m.plan_name planName,m.aim_questions aimQuestions,m.create_time createTime,
+        m.physician_id physicianId,
+        (select a.real_name from admin a where a.admin_id=m.physician_id) physicianName,
+        m.face_diagnose_id faceDiagnoseId,
+        (select a.real_name from admin a where a.admin_id=m.face_diagnose_id) faceDiagnoseName,
+        m.assistant_id assistantId,
+        (select a.real_name from admin a where a.admin_id=m.assistant_id) assistantName
+        ,'1' updateFlag
+        from pm_plan_cust_order m,pm_plan n where n.del_flag='N' and m.del_flag='N' and m.plan_id=n.id  and n.name like '%管理方案%' and m.cust_id=#{custId} ORDER BY m.create_time desc
+    </select>
+</mapper>

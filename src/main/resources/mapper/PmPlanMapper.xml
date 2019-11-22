@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yy.server.mapper.PmPlanMapper">
+    <resultMap id="BaseResultMap" type="com.yy.server.model.PmPlan">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="parent_id" property="parentId" jdbcType="INTEGER"/>
+        <result column="del_flag" property="delFlag" jdbcType="CHAR"/>
+        <result column="state" property="state" jdbcType="TINYINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="app_id" property="appId" jdbcType="VARCHAR"/>
+        <result column="order_id" property="orderId" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="voMap" type="com.yy.server.model.view.PmPlanVO">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="parent_id" property="parentId" jdbcType="INTEGER"/>
+        <result column="del_flag" property="delFlag" jdbcType="CHAR"/>
+        <result column="state" property="state" jdbcType="TINYINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="app_id" property="appId" jdbcType="VARCHAR"/>
+        <result column="order_id" property="orderId" jdbcType="INTEGER"/>
+    </resultMap>
+    <select id="getDataList" resultMap="voMap">
+        select a.* from pm_plan a
+        <where>
+            <if test="id !=null">
+                and a.id =#{id}
+            </if>
+            <if test="name !=null and name != ''">
+                and a.name like CONCAT('%',#{name},'%' )
+            </if>
+            <if test="state !=null and state != ''">
+                and a.state =#{state}
+            </if>
+            <if test="appId!=null and appId!=''">
+                and a.app_id = #{appId}
+            </if>
+            <if test="delFlag!=null and delFlag!=''">
+                and a.del_flag = #{delFlag}
+            </if>
+        </where>
+        order by state DESC, ABS(order_id) DESC,update_time DESC
+    </select>
+
+    <select id="getPmPlans" resultMap="BaseResultMap">
+        select * from pm_plan a
+        <where>
+            state=1 and del_flag='N'
+            <if test="appId!=null and appId!=''">
+                and a.app_id = #{appId}
+            </if>
+            <if test="parentId!=null and parentId!=''">
+                and a.parent_id = #{parentId}
+            </if>
+        </where>
+        order by CAST(order_id AS DECIMAL) ,update_time desc
+    </select>
+</mapper>

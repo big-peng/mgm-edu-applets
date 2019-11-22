@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yy.server.mapper.AppProductTypeMapper">
+    <resultMap id="BaseResultMap" type="com.yy.server.model.AppProductType">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="img_url" property="imgUrl" jdbcType="VARCHAR"/>
+        <result column="order_id" property="orderId" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="BIT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="app_id" property="appId" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getProductTypes" resultMap="BaseResultMap">
+        select * from app_product_type a
+        <where>
+            state=1
+            <if test="appId!=null and appId!=''">
+                and a.app_id = #{appId}
+            </if>
+        </where>
+        order by CAST(order_id AS DECIMAL)
+    </select>
+</mapper>

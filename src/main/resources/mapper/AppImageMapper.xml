@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yy.server.mapper.AppImageMapper">
+    <resultMap id="BaseResultMap" type="com.yy.server.model.AppImage">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="from_id" property="fromId" jdbcType="INTEGER"/>
+        <result column="order_id" property="orderId" jdbcType="INTEGER"/>
+        <result column="img_path" property="imgPath" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="del_flag" property="delFlag" jdbcType="CHAR"/>
+        <result column="upload_time" property="uploadTime" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="app_id" property="appId" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getAppImages" resultMap="BaseResultMap">
+        select * from app_image a
+        <where>
+            del_flag='N'
+            <if test="appId!=null and appId!=''">
+                and a.app_id = #{appId}
+            </if>
+            <if test="fromId!=null and fromId!=''">
+                and a.from_id = #{fromId}
+            </if>
+        </where>
+        order by CAST(order_id AS DECIMAL)
+    </select>
+    <update id="updateDelImagesByFromId">
+        update app_image set del_flag='Y',update_time=now() where from_id=#{fromId}
+   </update>
+</mapper>

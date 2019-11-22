@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yy.server.mapper.PmPlanCustOrderDetailPhMapper" >
+  <resultMap id="BaseResultMap" type="com.yy.server.model.PmPlanCustOrderDetailPh" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="current_value" property="currentValue" jdbcType="DECIMAL" />
+    <result column="last_value" property="lastValue" jdbcType="DECIMAL" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="getLastDataList" resultMap="BaseResultMap">
+    select a.* from pm_plan_cust_order_detail_ph a ,(SELECT
+			b.id
+                FROM
+                    pm_plan_cust_order b
+                WHERE
+                    b.cust_id = #{custId} and b.plan_name is null
+                ORDER BY
+                    b.create_time DESC
+                LIMIT 1) n
+        WHERE
+            a.order_id = n.id
+  </select>
+
+  <update id="updateDelOrderDetailPhsByOrderId">
+    update pm_plan_cust_order_detail_ph set del_flag='Y',update_time=now() where order_id=#{orderId}
+  </update>
+</mapper>

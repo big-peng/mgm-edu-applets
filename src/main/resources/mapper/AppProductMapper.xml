@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yy.server.mapper.AppProductMapper">
+    <resultMap id="BaseResultMap" type="com.yy.server.model.AppProduct">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="DECIMAL"/>
+        <result column="img_url" property="imgUrl" jdbcType="VARCHAR"/>
+        <result column="order_id" property="orderId" jdbcType="VARCHAR"/>
+        <result column="product_type_id" property="productTypeId" jdbcType="INTEGER"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="BIT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="app_id" property="appId" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <resultMap id="voMap" type="com.yy.server.model.view.AppProductVO">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="price" property="price" jdbcType="DECIMAL"/>
+        <result column="img_url" property="imgUrl" jdbcType="VARCHAR"/>
+        <result column="order_id" property="orderId" jdbcType="VARCHAR"/>
+        <result column="product_type_id" property="productTypeId" jdbcType="INTEGER"/>
+        <result column="productTypeName" property="productTypeName" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="BIT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="app_id" property="appId" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getProducts" resultMap="BaseResultMap">
+        select * from app_product a
+        <where>
+            state=1
+            <if test="appId!=null and appId!=''">
+                and a.app_id = #{appId}
+            </if>
+            <if test="productTypeId!=null and productTypeId!=''">
+                and a.product_type_id = #{productTypeId}
+            </if>
+            <if test="name !=null and name != ''">
+                and a.name like CONCAT('%',#{name},'%' )
+            </if>
+        </where>
+        order by CAST(order_id AS DECIMAL)
+    </select>
+
+
+    <select id="getProductList" resultMap="voMap">
+        select
+        a.`id`,
+        a.`name`,
+        a.`price`,
+        a.`img_url`,
+        a.`order_id`,
+        a.`product_type_id`,
+        b.name productTypeName,
+        a.`remark`,
+        a.`state`,
+        a.`app_id`
+        from app_product a,app_product_type b
+        <where>
+            a.product_type_id=b.id
+            <if test="appId!=null and appId!=''">
+                and a.app_id = #{appId}
+            </if>
+            <if test="productTypeId!=null and productTypeId!=''">
+                and a.product_type_id = #{productTypeId}
+            </if>
+            <if test="name !=null and name != ''">
+                and a.name like CONCAT('%',#{name},'%' )
+            </if>
+            <if test="state !=null and state != ''">
+                and a.state =#{state}
+            </if>
+        </where>
+        order by CAST(a.order_id AS DECIMAL)
+    </select>
+
+
+    <select id="getProductsByAIResultId" resultMap="voMap">
+        select
+        a.`id`,
+        a.`name`,
+        a.`price`,
+        a.`img_url`,
+        b.`order_id`,
+        a.`product_type_id`,
+        a.`remark`,
+        a.`state`,
+        a.`app_id`
+        from app_product a LEFT JOIN ai_diagnose_template_result_product_rel b
+        on a.id= b.product_id where a.state='1'
+        and b.result_id = #{resultId}
+        order by b.order_id asc
+    </select>
+</mapper>

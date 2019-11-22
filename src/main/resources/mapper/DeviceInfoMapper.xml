@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yy.server.mapper.DeviceInfoMapper">
+    <resultMap id="BaseResultMap" type="com.yy.server.model.DeviceInfo">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="cust_id" jdbcType="VARCHAR" property="custId"/>
+        <result column="device_name" jdbcType="VARCHAR" property="deviceName"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="device_uuid" jdbcType="VARCHAR" property="deviceUuid"/>
+        <result column="latitude" jdbcType="VARCHAR" property="latitude"/>
+        <result column="longitude" jdbcType="VARCHAR" property="longitude"/>
+        <result column="ip_address" jdbcType="VARCHAR" property="ipAddress"/>
+        <result column="login_time" jdbcType="TIMESTAMP" property="loginTime"/>
+        <result column="app_id" jdbcType="VARCHAR" property="appId"/>
+        <result column="device_pwd" jdbcType="VARCHAR" property="devicePwd"/>
+        <result column="salt" jdbcType="VARCHAR" property="salt"/>
+        <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="state" jdbcType="TINYINT" property="state"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+    </resultMap>
+
+
+    <resultMap id="voMap" type="com.yy.server.model.view.DeviceInfoVO">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="cust_id" jdbcType="VARCHAR" property="custId"/>
+        <result column="device_name" jdbcType="VARCHAR" property="deviceName"/>
+        <result column="device_uuid" jdbcType="VARCHAR" property="deviceUuid"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="latitude" jdbcType="VARCHAR" property="latitude"/>
+        <result column="longitude" jdbcType="VARCHAR" property="longitude"/>
+        <result column="ip_address" jdbcType="VARCHAR" property="ipAddress"/>
+        <result column="login_time" jdbcType="TIMESTAMP" property="loginTime"/>
+        <result column="app_id" jdbcType="VARCHAR" property="appId"/>
+        <result column="device_pwd" jdbcType="VARCHAR" property="devicePwd"/>
+        <result column="salt" jdbcType="VARCHAR" property="salt"/>
+        <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime"/>
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
+        <result column="state" jdbcType="TINYINT" property="state"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime"/>
+    </resultMap>
+    <resultMap id="accountInfo" type="java.util.HashMap">
+        <result column="account" property="account"/>
+        <result column="areacode" property="countryCode"/>
+    </resultMap>
+    <select id="getAccountInfo" resultMap="accountInfo">
+        select a.account ,b.areacode from customer a,country b where a.country_id=b.country_id and
+        a.account=#{account} and a.app_id=#{appId}
+    </select>
+
+
+    <select id="getListByDeviceName" resultMap="BaseResultMap">
+        select a.* from device_info a where  a.device_name=#{deviceName} and NOW() >= a.begin_time  and a.end_time>= NOW()
+    </select>
+
+    <select id="getDeviceInfoList" resultMap="voMap">
+        select
+        `id`,
+        `cust_id`,
+        `device_name`,
+        `device_uuid`,
+        `latitude`,
+        `longitude`,
+        `ip_address`,
+        `login_time`,
+        `app_id`,
+        `device_pwd`,
+        `salt`,
+        `begin_time`,
+        `end_time`,
+        `state`,
+        `created_time`,
+        `updated_time`,
+        `name`,
+        `remark`,
+        `phone`
+        from device_info a
+        <where>
+            <if test="appId!=null and appId!=''">
+                and a.app_id = #{appId}
+            </if>
+            <if test="deviceName !=null and deviceName != ''">
+                and a.device_name like CONCAT('%',#{deviceName},'%' )
+            </if>
+            <if test="deviceUuid !=null and deviceUuid != ''">
+                and a.device_uuid like CONCAT('%',#{deviceUuid},'%' )
+            </if>
+            <if test="state !=null and state != ''">
+                and a.state =#{state}
+            </if>
+        </where>
+        order by a.updated_time desc
+    </select>
+</mapper>
